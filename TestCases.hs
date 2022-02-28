@@ -1,4 +1,3 @@
-
 import Test.HUnit
 import BoardStatus
 import Play
