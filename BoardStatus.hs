@@ -3,8 +3,6 @@ import ValidMove
 import PossibleMoves
 import Data 
 
--- lol
-
 queening (Piece Pawn (x1, y1) color) (x2, y2)
   | color == White && x2 == 8 = True
   | color == Black && x2 == 1 = True
