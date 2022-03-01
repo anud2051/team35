@@ -1,7 +1,8 @@
-module BoardStatus (queening, choosePiece, whereIsKing, isCheck) where
+module BoardStatus (queening, choosePiece, whereIsKing, isCheck,isCheckMate) where
 import ValidMove 
 import PossibleMoves
 import Data 
+import MovePiece
 
 queening (Piece Pawn (x1, y1) color) (x2, y2)
   | color == White && x2 == 8 = True
@@ -21,20 +22,23 @@ whereIsKing ((Piece King pos1 color1):xs) piece@(Piece King pos2 color2)
   | color1 == color2 = pos1
   | otherwise = whereIsKing xs piece
 whereIsKing ((Piece _ pos1 _):xs) piece@(Piece King pos2 color2) = whereIsKing xs piece
-{-
-isCheckMate (Piece King (x1,y1) color) board = 
 
-  
-isCheckMateAux piece board = validMoves
-  where allMoves = possibleMoves piece
+isCheckMate king@(Piece King (x1,y1) color) board = isCheckMateAux king board ((x1,y1):validMoves)
+  where allMoves = possibleMoves king
         allSquares = posToBoard allMoves board
-        nearestPieces = findNearestPieces piece allSquares
-        validMoves = removePos piece nearestPieces allMoves 
--}
+        nearestPieces = findNearestPieces king allSquares
+        validMoves = removePos king nearestPieces allMoves 
+
+isCheckMateAux _ _ [] = True
+isCheckMateAux king@(Piece King pos color) board (x:xs) = isCheck (Piece King x color) testBoard && isCheckMateAux king board xs
+ where testBoard = movePiece king x board
+
+
+
+
 isCheck (Piece King (x1, y1) White) board = isNewPosInNp (x1,y1) (isCheckAux (onlyPieces board White) board)
 isCheck (Piece King (x1, y1) Black) board = isNewPosInNp (x1,y1) (isCheckAux (onlyPieces board Black) board)
 
-isCheckAux :: [Square] -> Board -> [(Int, Int)]
 isCheckAux [] _ = []
 isCheckAux (piece@(Piece Pawn pos color):xs) board = isCheckAux xs board ++ validMoves
   where allMoves = possibleMoves piece 
