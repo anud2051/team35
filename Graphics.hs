@@ -1,5 +1,5 @@
 import Play
-import Graphics.Glass
+import Graphics.Gloss
 
 
 --lll
