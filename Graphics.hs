@@ -1,5 +1,5 @@
 import Play
-import Graphics.Gloss
+--import Graphics.Gloss
 
 
 
