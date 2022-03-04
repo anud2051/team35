@@ -1,6 +1,15 @@
 module PossibleMoves (possibleMoves) where
 import Data 
 
+
+{-possibleMoves piece
+  finds all possible moves for a given piece
+  PRE: piece == (Piece ptype pos color)
+  RETURNS: a list of positions where the given piece could possibly move.
+  EXAMPLES: possibleMoves (Piece King (4,4) White) == [(3,5),(4,5),(5,5),(5,4),(5,3),(4,3),(3,4),(3,3)]
+             possibleMoves (Piece Pawn (3,2) White) == [(4,2),(5,2),(4,1),(4,3)] 
+            possibleMoves (Piece Knight (8,2) Black) == [(6,3),(7,4),(6,1)]
+-}
 {- move functions idé for each pice taken from https://okpanico.wordpress.com/2018/02/08/haskell-118-un-po-di-monadi-6/ -}
 possibleMoves (Piece King (x,y) _ ) = filter onBoard
     
@@ -45,7 +54,6 @@ possibleMoves pawn@(Piece Pawn (x,y) Black)
   | y == 1 = filter onBoard [(x-1,y),(x-2,y),(x-1,y+1)]
   | otherwise = filter onBoard [(x-1,y),(x-2,y),(x-1,y-1),(x-1,y+1)]
     where onBoard (x,y) = x `elem` [1..8] && y `elem` [1..8]
-
 possibleMoves pawn@(Piece Pawn (x,y) White)
   | y == 8 = filter onBoard [(x+1,y),(x+2,y),(x+1,y-1)]
   | y == 1 = filter onBoard [(x+1,y),(x+2,y),(x+1,y+1)]

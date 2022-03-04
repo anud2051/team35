@@ -1,3 +1,14 @@
+
+{-Add function specifications for monad functions???
+choosePiece 
+showBoard
+main
+play
+-}
+
+
+
+
 {-
 rocked
 
