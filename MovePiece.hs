@@ -1,24 +1,22 @@
-module MovePiece (movePiece,posToSquare) where
+module MovePiece (movePiece,posToSquare,replaceWithEmpty) where
 import Data 
 
--- rad 33, 
-
-{-movePiece square move board 
+{-movePiece square newPos board 
   moves a piece from one square to another square in the board
   PRE: square == (Piece ptype position color)
-  RETURNS: an updated board where the position of the given square has been changed to empty and the square at the position of the given move has been updated containing the piece of given square
+  RETURNS: an updated board where the position of the given square has been changed to empty and the square at the position of the given newPos has been updated containing the piece of given square
   EXAMPLES: movePiece (Piece Rock (1,1) White) (1,2) [Piece Rock (1,1) White, Piece Knight (1,2) White, Piece Bishop (1,3) White, Piece Queen (1,5) White] == [Empty (1,1),Piece Rock (1,2) White,Piece Bishop (1,3) White,Piece Queen (1,5) White]      
             movePiece (Piece Pawn (7,2) Black) (6,6) [Empty(6,6),Empty(6,7),Empty(6,8), Piece Pawn (7,1) Black,Piece Pawn (7,2) Black] == [Piece Pawn (6,6) Black,Empty (6,7),Empty (6,8),Piece Pawn (7,1) Black,Empty (7,2)]
 -}
 movePiece :: Square -> Position -> Board -> Board
-movePiece square move board = replace square posSquare replaceEmpty
+movePiece square newPos board = replace square posSquare replaceEmpty
  where 
-  posSquare = posToSquare move board 
+  posSquare = posToSquare newPos board 
   replaceEmpty = replaceWithEmpty square board
 
 
 {- replaceWithEmpty square xs
-  replaces the square a piece has left with an empty square
+  replaces the square a piece has left with an empty square 
   RETURNS: a Board where the position of square in the board xs is replaced with Empty
   EXAMPLES: replaceWithEmpty (Piece Rock (1,1) White) [Piece Rock (1,1) White,Piece Knight (1,2) White,Piece Bishop (1,3) White] == [Empty (1,1),Piece Knight (1,2) White,Piece Bishop (1,3) White]
 -}
@@ -29,13 +27,13 @@ replaceWithEmpty piece@(Piece piecetype (x1,y1) color) (x:xs)
   | x == piece = Empty (x1,y1) : (replaceWithEmpty piece xs)
   | otherwise = x:(replaceWithEmpty piece xs) 
 
-{- posToSquare pos xs
+{- posToSquare pos1 xs
   finds the piece on a specific position
-  PRE: pos1 has to exist in the board xs
-  RETURNS: the Square of the position pos in the board xs
+  RETURNS: the Square of the position pos1 in the board xs
   EXAMPLES: posToSquare (1,1) [Piece Rock (1,1) White,Piece Knight (1,2) White,Piece Bishop (1,3) White] == Piece Rock (1,1) White
 -}
 --VARIANT: lenght of xs
+
 posToSquare :: Position -> Board -> Square
 posToSquare pos1 ((Empty pos2):xs) 
   | pos1 == pos2 = Empty pos2
